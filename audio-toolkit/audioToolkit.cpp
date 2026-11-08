@@ -8,7 +8,8 @@
 // Constant variables
 const double SPEED_OF_SOUND_AT_0C {331.3};
 const double VOLTAGE_REFERENCE_LEVEL {0.7746};
-const int TUNING_PITCH_A4 {440};
+const int    TUNING_PITCH_A4 {440};
+const int    MIDI_NOTE_A4 {69};
 
 
 // Conversion functions, their declarations and definitions
@@ -29,7 +30,7 @@ double dbuToVolts(double dBu){
 
 double voltsToDbu(double volts){
 
-    return 20 * std::log10(volts / VOLTAGE_REFERENCE_LEVEL);
+    return 20.0 * std::log10(volts / VOLTAGE_REFERENCE_LEVEL);
 }
 
 double distanceToDelay(double meters, double tempC){
@@ -45,12 +46,12 @@ double frequencyToPeriod(double Hz){
 
 double midiToFrequency(int note){
 
-    return TUNING_PITCH_A4 * std::pow(2.0, (note - 69) / 12.0);
+    return TUNING_PITCH_A4 * std::pow(2.0, (note - MIDI_NOTE_A4) / 12.0);
 }
 
-int    frequencyToMidi(double Hz){
+int frequencyToMidi(double Hz){
 
-    return static_cast<int>(std::round(69 + 12 * std::log2(Hz / TUNING_PITCH_A4)));
+    return static_cast<int>(std::round(MIDI_NOTE_A4 + 12 * std::log2(Hz / TUNING_PITCH_A4)));
 }
 
 
@@ -130,7 +131,7 @@ void runDbToLinear(){
 
 void runLinearToDb(){
     std::cout << "2 Linear gain -> dB, enter linear gain value to be converted:" << "\n\n";
-    double linearGain = readDouble(0.0001, 35000);
+    double linearGain = readDouble(0.001, 35000);
     std::cout << linearGain << " Voltage/Amplitude linear gain is " << linearToDb(linearGain) << " dB" << "\n\n";
 }
 
@@ -142,7 +143,7 @@ void runDbuToVolts(){
 
 void runVoltsToDbu(){
     std::cout << "4 Volts -> dBu, enter volts value to be converted:" << "\n\n";
-    double volts = readDouble(0.0001, 35000);
+    double volts = readDouble(0.001, 35000);
     std::cout << volts << " volts is " << voltsToDbu(volts) << " dBu" << "\n\n";
 }
 
@@ -168,7 +169,7 @@ void runMidiToFrequency(){
 
 void runFrequencyToMidi(){
     std::cout << "8 Frequency (Hz) -> MIDI note, enter frequency (Hz) to be converted:" << "\n\n";
-    double Hz = readDouble(1, 22000);
+    double Hz = readDouble(8, 12543);
     std::cout << Hz << " Hz is closest to " << frequencyToMidi(Hz) << " MIDI note" << "\n\n";
 }
 
@@ -210,7 +211,7 @@ std::cout.precision(3);
         case 8: runFrequencyToMidi(); break; 
 
         default:
-        std::cout << "Undefined case";
+        std::cout << "Undefined case" << "\n\n";
 
         }
     
