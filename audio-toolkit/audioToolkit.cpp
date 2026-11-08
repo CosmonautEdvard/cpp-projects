@@ -6,9 +6,9 @@
 
 
 // Constant variables
-const double speedOfSound {331.3};
-const double voltageReferenceLevel {0.7746};
-const int tuningPitch {440};
+const double SPEED_OF_SOUND_AT_0C {331.3};
+const double VOLTAGE_REFERENCE_LEVEL {0.7746};
+const int TUNING_PITCH_A4 {440};
 
 
 // Conversion functions, their declarations and definitions
@@ -24,17 +24,17 @@ double linearToDb(double gain){
 
 double dbuToVolts(double dBu){
 
-    return voltageReferenceLevel * std::pow(10.0, dBu / 20.0);
+    return VOLTAGE_REFERENCE_LEVEL * std::pow(10.0, dBu / 20.0);
 }
 
 double voltsToDbu(double volts){
 
-    return 20 * std::log10(volts / voltageReferenceLevel);
+    return 20 * std::log10(volts / VOLTAGE_REFERENCE_LEVEL);
 }
 
 double distanceToDelay(double meters, double tempC){
 
-    double speedOfSoundAtC = speedOfSound + 0.606 * tempC;
+    double speedOfSoundAtC = SPEED_OF_SOUND_AT_0C + 0.606 * tempC;
     return meters / speedOfSoundAtC * 1000.0;
 }
 
@@ -45,12 +45,12 @@ double frequencyToPeriod(double Hz){
 
 double midiToFrequency(int note){
 
-    return tuningPitch * std::pow(2.0, (note - 69) / 12.0);
+    return TUNING_PITCH_A4 * std::pow(2.0, (note - 69) / 12.0);
 }
 
 int    frequencyToMidi(double Hz){
 
-    return static_cast<int>(std::round(69 + 12 * std::log2(Hz / tuningPitch)));
+    return static_cast<int>(std::round(69 + 12 * std::log2(Hz / TUNING_PITCH_A4)));
 }
 
 
@@ -65,7 +65,7 @@ int readInt(int lowerLimit, int upperLimit){
                    std::cin.clear();
                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 }
-                std::cout << "Enter a number between " << lowerLimit << " and " << upperLimit << std::endl;
+                std::cout << "Enter a number between " << lowerLimit << " and " << upperLimit << '\n' << std::endl;
               }
     return input;
 }
@@ -120,6 +120,58 @@ int mainMenu(){
 }
 
 
+// Functions for menu options
+
+void runDbToLinear(){
+    std::cout << "1 dB -> Linear Gain, enter dB value to be converted: \n\n";
+    double dB = readDouble(-140, 90);
+    std::cout << dB << " dB is " << dbToLinear(dB) << " Voltage/Amplitude linear gain" << "\n\n";
+}
+
+void runLinearToDb(){
+    std::cout << "2 Linear gain -> dB, enter linear gain value to be converted:" << "\n\n";
+    double linearGain = readDouble(0.0001, 35000);
+    std::cout << linearGain << " Voltage/Amplitude linear gain is " << linearToDb(linearGain) << " dB" << "\n\n";
+}
+
+void runDbuToVolts(){
+    std::cout << "3 dBu -> volts, enter dBu value to be converted:" << "\n\n";
+    double dBu = readDouble(-140, 90);
+    std::cout << dBu << " dBu is " << dbuToVolts(dBu) << " volts" << "\n\n";
+}
+
+void runVoltsToDbu(){
+    std::cout << "4 Volts -> dBu, enter volts value to be converted:" << "\n\n";
+    double volts = readDouble(0.0001, 35000);
+    std::cout << volts << " volts is " << voltsToDbu(volts) << " dBu" << "\n\n";
+}
+
+void runDistanceToDelay(){
+    std::cout << "5 Distance (m) -> delay (ms), enter distance (m) value to be converted:" << "\n\n";
+    double distanceM = readDouble(0, 35000);
+    std::cout << "What is the ambient temperature in celsius?" << "\n\n";
+    double tempC = readDouble(-60, 60);
+    std::cout << distanceM << " m corresponds to a " << distanceToDelay(distanceM, tempC) << " ms delay at " << tempC << " C" << "\n\n";
+}
+
+void runFrequencyToPeriod(){
+    std::cout << "6 Frequency (Hz) -> period (ms), enter frequency (Hz) to be converted:" << "\n\n";
+    double Hz = readDouble(1, 22000);
+    std::cout << Hz << " Hz wave has a period of " << frequencyToPeriod(Hz) << " ms" << "\n\n";
+}
+
+void runMidiToFrequency(){
+    std::cout << "7 MIDI note -> frequency (Hz), enter a MIDI note (0-127) to be converted:" << "\n\n";
+    int note = readInt(0, 127);
+    std::cout << note << " note has a frequency of " << midiToFrequency(note) << " Hz" << "\n\n";
+}
+
+void runFrequencyToMidi(){
+    std::cout << "8 Frequency (Hz) -> MIDI note, enter frequency (Hz) to be converted:" << "\n\n";
+    double Hz = readDouble(1, 22000);
+    std::cout << Hz << " Hz is closest to " << frequencyToMidi(Hz) << " MIDI note" << "\n\n";
+}
+
 
 
 int main(){
@@ -134,75 +186,30 @@ std::cout.precision(3);
         int choice = mainMenu();
 
         // If choice is 0 (quit) exit the program loop and skip the menuReturnCheck function
-        if(choice == 0){
-            break; 
-        }
+        if(choice == 0){ break; }
         
         std::cout << "\n";  // An extra empty line for better user readability
 
         // switch direct the other 8 choices or an invalid input
         switch(choice){
         
-        case 1: {
-            
-        std::cout << "1 dB -> Linear Gain, enter dB value to be converted: \n\n";
-        double dB = readDouble(-140, 90);
-        std::cout << dB << " dB is " << dbToLinear(dB) << " Voltage/Amplitude linear gain" << "\n\n";
-        }break;
+        case 1: runDbToLinear(); break;
         
-        case 2: {
-
-        std::cout << "2 Linear gain -> dB, enter linear gain value to be converted:" << "\n\n";
-        double linearGain = readDouble(0.0001, 35000);
-        std::cout << linearGain << " Voltage/Amplitude linear gain is " << linearToDb(linearGain) << " dB" << "\n\n";
-        }break;
+        case 2: runLinearToDb(); break;
         
-        case 3: {
-
-        std::cout << "3 dBu -> volts, enter dBu value to be converted:" << "\n\n";
-        double dBu = readDouble(-140, 90);
-        std::cout << dBu << " dBu is " << dbuToVolts(dBu) << " volts" << "\n\n";
-        }break;
+        case 3: runDbuToVolts(); break;
         
-        case 4: {
-
-        std::cout << "4 Volts -> dBu, enter volts value to be converted:" << "\n\n";
-        double volts = readDouble(0.0001, 35000);
-        std::cout << volts << " volts is " << voltsToDbu(volts) << " dBu" << "\n\n";
-        }break;
+        case 4: runVoltsToDbu(); break;
         
-        case 5: {
-
-        std::cout << "5 Distance (m) -> delay (ms), enter distance (m) value to be converted:" << "\n\n";
-        double distanceM = readDouble(0, 35000);
-        std::cout << "What is the ambient temperature in celsius?" << "\n\n";
-        double tempC = readDouble(-60, 60);
-        std::cout << distanceM << " m corresponds to a " << distanceToDelay(distanceM, tempC) << " ms delay at " << tempC << " C" << "\n\n";
-        }break;
+        case 5: runDistanceToDelay(); break;
         
-        case 6: {
-
-        std::cout << "6 Frequency (Hz) -> period (ms), enter frequency (Hz) to be converted:" << "\n\n";
-        double Hz = readDouble(1, 22000);
-        std::cout << Hz << " Hz wave has a period of " << frequencyToPeriod(Hz) << " ms" << "\n\n";
-        }break;
+        case 6: runFrequencyToPeriod(); break;
         
-        case 7: {
-
-        std::cout << "7 MIDI note -> frequency (Hz), enter a MIDI note (0-127) to be converted:" << "\n\n";
-        int note = readInt(0, 127);
-        std::cout << note << " note has a frequency of " << midiToFrequency(note) << " Hz" << "\n\n";
-        }break;
+        case 7: runMidiToFrequency(); break;
         
-        case 8: {
-
-        std::cout << "8 Frequency (Hz) -> MIDI note, enter frequency (Hz) to be converted:" << "\n\n";
-        double Hz = readDouble(1, 22000);
-        std::cout << Hz << " Hz is closest to " << frequencyToMidi(Hz) << " MIDI note" << "\n\n";
-        }break; 
+        case 8: runFrequencyToMidi(); break; 
 
         default:
-
         std::cout << "Undefined case";
 
         }
