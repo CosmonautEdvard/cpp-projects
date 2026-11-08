@@ -1,37 +1,7 @@
 #include <iostream>
-#include <limits>
 #include "conversions.h"
+#include "input.h"
 
-
-// Type and range check for cin int
-int readInt(int lowerLimit, int upperLimit){
-    int input {};    
-
-    while(!(std::cin >> input) || input > upperLimit || input < lowerLimit){
-
-                if(std::cin.fail()){
-                   std::cin.clear();
-                   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                }
-                std::cout << "Enter a number between " << lowerLimit << " and " << upperLimit << '\n' << std::endl;
-              }
-    return input;
-}
-
-// Type and range chech for cin double
-double readDouble(double lowerLimit, double upperLimit){
-    double input {};    
-
-    while(!(std::cin >> input) || input > upperLimit || input < lowerLimit){
-
-                if(std::cin.fail()){
-                   std::cin.clear();
-                   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                }
-                std::cout << "Enter a numeric value between " << lowerLimit << " and " << upperLimit << '\n' << std::endl;
-              }
-    return input;
-}
 
 // Check if the user wants to continue using the program (update condition for the keepRunning for loop)
 int keepRunningCheck(){
