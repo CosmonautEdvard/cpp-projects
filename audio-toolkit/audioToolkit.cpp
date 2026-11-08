@@ -39,7 +39,6 @@ int mainMenu(){
 
 
 // Functions for menu options
-
 void runDbToLinear(){
     std::cout << "1 dB -> Linear Gain, enter dB value to be converted: \n\n";
     double dB = readDouble(-140, 90);
