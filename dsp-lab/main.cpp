@@ -12,5 +12,11 @@ std::cout << "Sample 25: " << wave[25] << '\n';
 std::cout << "Sample 50: " << wave[50] << '\n';
 std::cout << "Sample 75: " << wave[75] << '\n';
 
+applyGainDb(wave, -20.0);
+std::cout << "Sample 25 after -20 dB: " << wave[25] << '\n';
+
+applyGainDb(wave, 20.0);
+std::cout << "Sample 25 after +20 dB: " << wave[25] << '\n';
+
 
    }
