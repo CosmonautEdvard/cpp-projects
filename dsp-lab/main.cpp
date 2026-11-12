@@ -12,11 +12,13 @@ std::cout << "Sample 25: " << wave[25] << '\n';
 std::cout << "Sample 50: " << wave[50] << '\n';
 std::cout << "Sample 75: " << wave[75] << '\n';
 
-applyGainDb(wave, -20.0);
-std::cout << "Sample 25 after -20 dB: " << wave[25] << '\n';
+std::cout << "Peak: " << peakLevelDb(wave) << " dB\n";           // about 0
+applyGainDb(wave, -6.0);
+std::cout << "Peak after -6 dB: " << peakLevelDb(wave) << " dB\n"; // about -6.02
 
-applyGainDb(wave, 20.0);
-std::cout << "Sample 25 after +20 dB: " << wave[25] << '\n';
+std::vector<float> silence(100);
+silence[10] = -0.5f;
+std::cout << "Silence: " << peakLevelDb(silence) << " dB\n";       // -90
 
 
    }

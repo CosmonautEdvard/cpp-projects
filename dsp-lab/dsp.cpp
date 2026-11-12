@@ -3,6 +3,7 @@
 #include "conversions.h"
 
 const double PI {3.14159265358979323846};
+const double NOISE_FLOOR_DB {-90.0};
 
 std::vector<float> generateSine(double frequencyHz, double durationSec, double amplitude, double sampleRate){
 
@@ -35,9 +36,26 @@ void applyGainDb(std::vector<float>& samples, double gainDb){
         
 }
 
-// void applyGainDb(std::vector<float>& samples, double gainDb){}
-// dbToLinearGain(gainDb)
 
-// double peakLevelDb(const std::vector<float>& samples);
+
+
+double peakLevelDb(const std::vector<float>& samples){
+
+    float peak = 0.0f;
+
+    for(std::size_t n = 0; n < samples.size(); n++){
+        
+        if (std::abs(samples[n]) > peak){
+            peak = std::abs(samples[n]);
+        }
+    }
+
+    if (peak < dbToLinear(NOISE_FLOOR_DB)){
+        return NOISE_FLOOR_DB;
+    }
+
+
+    return linearToDb(peak);
+}
 
 
