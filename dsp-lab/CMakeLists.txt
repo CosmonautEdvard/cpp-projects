@@ -4,6 +4,7 @@ project(DSP_Lab)
 add_executable(dspLab
     main.cpp 
     ../audio-toolkit/conversions.cpp 
+    dsp.cpp 
 )
 
 target_compile_features(dspLab PRIVATE cxx_std_17)
