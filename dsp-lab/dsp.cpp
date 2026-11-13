@@ -1,6 +1,7 @@
 #include "dsp.h"
 #include <cmath>
 #include "conversions.h"
+#include <fstream>
 
 const double PI {3.14159265358979323846};
 const double NOISE_FLOOR_DB {-90.0};
@@ -37,8 +38,6 @@ void applyGainDb(std::vector<float>& samples, double gainDb){
 }
 
 
-
-
 double peakLevelDb(const std::vector<float>& samples){
 
     float peak = 0.0f;
@@ -59,3 +58,18 @@ double peakLevelDb(const std::vector<float>& samples){
 }
 
 
+bool writeSamplesToCsv(const std::vector<float>& samples, const std::string& filename){
+
+    std::ofstream file(filename);
+
+    if(!file){
+    return false;
+    }
+
+    for(std::size_t n = 0; n < samples.size(); n++){
+        
+        file << samples[n] << '\n';
+    }
+
+    return true;
+}
