@@ -11,3 +11,6 @@ double peakLevelDb(const std::vector<float>& samples);
 
 // File creation function
 bool writeSamplesToCsv(const std::vector<float>& samples, const std::string& filename); 
+
+// Low pass filter
+void applyLowPass(std::vector<float>& samples, double cutoffHz, double sampleRate);

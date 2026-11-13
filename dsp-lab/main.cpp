@@ -1,5 +1,4 @@
 #include <iostream>
-#include "conversions.h"
 #include "dsp.h"
 
 
@@ -9,14 +8,14 @@
 
    int main(){
 
-std::vector<float> wave = generateSine(441.0, 0.01, 1.0, 44100.0);
+std::vector<float> low  = generateSine(100.0,  1.0, 1.0, 44100.0);
+std::vector<float> high = generateSine(5000.0, 1.0, 1.0, 44100.0);
 
-if(writeSamplesToCsv(wave, "sine.csv")){
-    std::cout << "Saved " << wave.size() << " samples\n";
-}
-else{
-    std::cout << "Could not write file\n";
-}
+applyLowPass(low,  1000.0, 44100.0);
+applyLowPass(high, 1000.0, 44100.0);
+
+std::cout << "100 Hz peak:  " << peakLevelDb(low)  << " dB\n";
+std::cout << "5000 Hz peak: " << peakLevelDb(high) << " dB\n";
 
 /*
 std::cout << "Number of samples: " << wave.size() << '\n';

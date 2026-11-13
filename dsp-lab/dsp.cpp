@@ -73,3 +73,18 @@ bool writeSamplesToCsv(const std::vector<float>& samples, const std::string& fil
 
     return true;
 }
+
+
+void applyLowPass(std::vector<float>& samples, double cutoffHz, double sampleRate){
+
+    double a = 1 - exp(-2*PI * cutoffHz / sampleRate);
+    double previous = 0.0;
+
+    for(std::size_t n = 0; n < samples.size(); ++n){
+        double output = previous + a * (samples[n] - previous);
+        samples[n] = static_cast<float>(output);
+        previous = output;
+
+    }
+
+}
